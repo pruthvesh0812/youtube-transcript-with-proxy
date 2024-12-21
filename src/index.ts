@@ -205,7 +205,7 @@ export class YoutubeTranscript {
     if(proxyUrl.includes('https://') || proxyUrl.includes('http://')){
       return true;
     }
-    else return false;
+    else return false
   }
 }
 
