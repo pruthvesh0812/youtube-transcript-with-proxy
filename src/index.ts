@@ -50,6 +50,14 @@ export class YoutubeTranscriptNotAvailableLanguageError extends YoutubeTranscrip
   }
 }
 
+export class ProxyInvalidError extends YoutubeTranscriptError {
+  constructor(proxyUrl:string) {
+    super(
+      `Provided proxy url ${proxyUrl} is invalid.`
+    );
+  }
+}
+
 export interface TranscriptConfig {
   lang?: string;
   proxyUrl?:string;
@@ -75,7 +83,15 @@ export class YoutubeTranscript {
     config?: TranscriptConfig
   ): Promise<TranscriptResponse[]> {
     const identifier = this.retrieveVideoId(videoId);
-    const proxyAgent = (config?.proxyUrl) ? new HttpsProxyAgent(config.proxyUrl): null;
+
+    let proxyAgent = null;
+    if(config?.proxyUrl){
+      const isValid = this.checkValidProxy(config.proxyUrl)
+      if(!isValid){
+        throw new ProxyInvalidError(config.proxyUrl)
+      }
+      proxyAgent = new HttpsProxyAgent(config.proxyUrl);
+    }
 
     const videoPageResponse = await axios.get(
       `https://www.youtube.com/watch?v=${identifier}`,
@@ -184,13 +200,13 @@ export class YoutubeTranscript {
       'Impossible to retrieve Youtube video ID.'
     );
   }
+
+  private static checkValidProxy(proxyUrl:string){
+    if(proxyUrl.includes('https://') || proxyUrl.includes('http://')){
+      return true;
+    }
+    else return false;
+  }
 }
 
-const getTranscripts = async ()=>{
-  const transcriptResponse = await YoutubeTranscript.fetchTranscript("6qOzZs-ljHQ",{proxyUrl: "http://RVdxY9NQchMk:BNphEeFXYY8u@superproxy.zenrows.com:1337"})
-  console.log(transcriptResponse)
-  const transcriptText = YoutubeTranscript.getCompleteTranscript(transcriptResponse)
-  console.log(transcriptText)
-}
 
-getTranscripts()
