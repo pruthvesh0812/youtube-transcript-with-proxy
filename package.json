@@ -1,6 +1,6 @@
 {
   "name": "youtube-transcript-via-proxy",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "dist/index.js",
   "scripts": {
     "start": "tsx src/index.ts",
