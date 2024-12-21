@@ -15,7 +15,6 @@
     "@types/axios": "^0.14.4",
     "axios": "^1.7.9",
     "https-proxy-agent": "^7.0.6",
-    "typescript": "^5.7.2",
-    "youtube-transcript-via-proxy": "file:youtube-transcript-via-proxy-1.0.3.tgz"
+    "typescript": "^5.7.2"
   }
 }
